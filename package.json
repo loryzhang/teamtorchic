@@ -56,6 +56,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^22.1.4",
     "react-test-renderer": "^16.2.0",
     "regenerator-runtime": "^0.11.1",
@@ -67,6 +68,22 @@
     ]
   },
   "jest": {
-    "transform": {}
+    "moduleFileExtensions": ["js", "jsx"],
+    "moduleDirectories": ["node_modules", "bower_components", "shared"],
+
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
+      "\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js",
+      "Submit": "<rootDir>/client/src/components/submit.jsx",
+      "App": "<rootDir>/client/src/app.jsx",
+      "Posts": "<rootDir>/client/src/components/posts.jsx",
+      "Post": "<rootDir>/client/src/components/post.jsx",
+      "Comment": "<rootDir>/client/src/components/comment.jsx",
+      "Header": "<rootDir>/client/src/components/header.jsx",
+      "Login": "<rootDir>/client/src/components/login.jsx",
+      "Search": "<rootDir>/client/src/components/search.jsx",
+      "Signup": "<rootDir>/client/src/components/signup.jsx",
+      "Suggestions": "<rootDir>/client/src/components/suggestions.jsx"
+    }
   }
 }
