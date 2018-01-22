@@ -1,20 +1,44 @@
 const controller = require('./controllers');
 const router = require('express').Router();
 const multer = require('multer');
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
+// const fs = require('fs');
 const { isLoggedIn } = require('./middleware');
 
-const storageObject = multer.diskStorage({
 
-// var path = path.join(__dirname, '/../client/dist');
-
-  destination(req, file, cb) {
-    cb(null, './images');
-  },
-  filename(req, file, cb) {
-    cb(null, Date.now() + file.originalname);
-  },
+AWS.config.update({
+  accessKeyId: process.env.AWSAccessKeyId,
+  secretAccessKey: process.env.AWSSecretKey,
+  subregion: 'us-west-1',
 });
-const upload = multer({ storage: storageObject });
+const s3 = new AWS.S3();
+
+// const storageObject = multer.diskStorage({
+
+// // var path = path.join(__dirname, '/../client/dist');
+
+//   destination(req, file, cb) {
+//     cb(null, './images');
+//   },
+//   filename(req, file, cb) {
+//     cb(null, Date.now() + file.originalname);
+//   },
+// });
+// const upload = multer({ storage: storageObject });
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'eatchic',
+    metadata: (req, file, cb) => {
+      cb(null, { fieldName: `image/${file.originalname}` });
+    },
+    key: (req, file, cb) => {
+      cb(null,`image/${file.originalname}`);
+    },
+  }),
+});
 
 router.get('/search/:searchTerm/:searchValue', isLoggedIn, (req, res) => {
   const { searchTerm, searchValue } = req.params;
