@@ -5,7 +5,7 @@
 import React from 'react';
 import $ from 'jquery';
 // import io from 'socket.io-client';
-import Suggestions from './suggestions';
+import Suggestions from './suggestions.jsx';
 
 class Submit extends React.Component {
   constructor(props) {
