@@ -16,7 +16,7 @@
     "dev": "start nodemon server/index.js && start webpack -d --watch && start stylus -w client/src/index.styl -o client/dist/stylus.css"
   },
   "dependencies": {
-    "aws-sdk": "^2.185.0",
+    "aws-sdk": "^2.205.0",
     "axios": "^0.17.1",
     "bluebird": "^3.5.1",
     "body-parser": "^1.17.0",
