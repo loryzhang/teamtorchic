@@ -117,7 +117,6 @@ class Submit extends React.Component {
       processData: false,
       contentType: false,
     });
-    this.props.handlePostSubmit();
     this.setState({
       content: '',
       restaurant: '',

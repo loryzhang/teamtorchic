@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import axios from 'axios';
 import ReactDOM from 'react-dom';
 import Header from './components/header.jsx';
 import Submit from './components/submit.jsx';
@@ -18,97 +18,74 @@ class App extends React.Component {
     this.changeView = this.changeView.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
-    this.handlePostSubmit = this.handlePostSubmit.bind(this);
   }
 
   componentDidMount() {
     this.fetchData();
   }
 
-  fetchData() {
-    $.get({
-      url: '/session',
-      success: (data) => {
-        if (data) {
-          this.setState({
-            user: data.user,
-            id: data.id,
-          });
-          $.get({
-            url: '/posts',
-            success: (result) => {
-              this.setState({
-                posts: result,
-              });
-            },
-            err: (err) => {
-              console.log(err);
-            },
-          });
-        } else {
-          $.get({
-            url: '/home',
-            success: (result) => {
-              this.setState({
-                posts: result,
-              });
-            },
-          });
-        }
-      },
-      err: (err) => {
-        console.log(err);
-      },
-    });
-  }
-
-  handlePostSubmit() {
-    this.fetchData();
+  async fetchData() {
+    try {
+      const hasSession = await axios('/session');
+      if (hasSession.data) {
+        const { user, id } = hasSession.data;
+        const prevUser = await axios('/posts');
+        // console.log('prev', prevUser.data);
+        const posts = prevUser.data;
+        this.setState({
+          user,
+          id,
+          posts,
+        });
+      } else {
+        const homepage = await axios('/home');
+        const posts = homepage.data;
+        this.setState({
+          posts,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   handleLogin(user) {
     this.setState({ user });
   }
 
-  handleLogout() {
-    $.get({
-      url: '/logout',
-      success: () => {
-        this.setState({
-          user: null,
-          id: null,
-        });
-      },
-    });
+  async handleLogout() {
+    try {
+      await axios('/logout');
+      this.setState({
+        user: null,
+        id: null,
+      })
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  handleSearch(searchTerm, value) {
+  async handleSearch(searchTerm, value) {
     if (searchTerm === 'rating') {
-      $.get({
-        url: '/rating',
-        success: (data) => {
-          this.setState({
-            posts: data,
-          });
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
+      try {
+        const posts = await axios('/rating');
+        this.setState({
+          posts: posts.data,
+        });
+      } catch (e) {
+        console.log(e);
+      }
     } else if (value === '') {
       return;
     } else {
-      $.get({
-        url: `/search/${searchTerm}/${value}`,
-        success: (data) => {
-          this.setState({
-            posts: data,
-          });
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
+      try {
+        const posts = await axios(`/search/${searchTerm}/${value}`);
+        this.setState({
+          posts: posts.data
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 
@@ -129,7 +106,6 @@ class App extends React.Component {
         <Submit
           user={this.state.user}
           id={this.state.id}
-          handlePostSubmit={this.handlePostSubmit}
         />}
         <Posts
           user={this.state.user}
