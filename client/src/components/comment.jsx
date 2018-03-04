@@ -149,8 +149,6 @@ class Comment extends React.Component {
               </button>}
           </div>
           <div className="col-2">
-          </div>
-          <div className="col-2">
             {(this.state.reviews.length > 0) &&
             <button
               type="button"

@@ -1,11 +1,7 @@
-/* global FormData */
-/* global window */
-/* eslint react/no-unused-state: "off" */
-
 import React from 'react';
-import $ from 'jquery';
-// import io from 'socket.io-client';
-import Suggestions from './suggestions';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import Suggestions from './suggestions.jsx';
 
 class Submit extends React.Component {
   constructor(props) {
@@ -20,46 +16,46 @@ class Submit extends React.Component {
       dishes: null,
       isRecipe: false,
     };
-    this.preventDefault = this.preventDefault.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.handleFiles = this.handleFiles.bind(this);
-    this.handleDrop = this.handleDrop.bind(this);
     this.suggest = this.suggest.bind(this);
     this.endSuggest = this.endSuggest.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.handleAcceptDish = this.handleAcceptDish.bind(this);
     this.handleAcceptRestaurant = this.handleAcceptRestaurant.bind(this);
+    this.onDrop = this.onDrop.bind(this);
 
-    $.get({
-      url: '/restaurants',
-    }).done((data) => {
-      this.setState({ restaurants: data.rows });
-    });
-    $.get({
-      url: '/dishes',
-    }).done((data) => {
-      this.setState({ dishes: data.rows });
-    });
-  }
+    (async () => {
+      try {
+        this.setState({ 
+          dishes: await this.getDishList(),
+          restaurants: await this.getRestaurantList()});
+      } catch(e) {
+        this.setState({
+          dishes: [],
+          restaurants: [],
+        })
+      }
+    })();   
+    }
 
-  preventDefault(e) {
-    e.stopPropagation();
-    e.preventDefault();
-  }
-
-  handleDrop(e) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const { files } = e.dataTransfer;
+  onDrop(files) {
+    const [{ preview }] = files; 
     const [file] = files;
-    this.setState({ image: file, photoURL: window.URL.createObjectURL(file) });
+    this.setState({
+      image: file,
+      photoURL: preview,
+    });
   }
 
-  handleChange(event) {
-    this.setState({ [event.target.id]: event.target.value });
+  async getDishList() {
+    const dishes = await axios('/dishes');
+    return dishes.data.rows;
+  }
+  
+  async getRestaurantList() {
+    const restaurants = await axios('/restaurants');
+    return restaurants.data.rows;
   }
 
   handleAcceptDish(event) {
@@ -89,7 +85,7 @@ class Submit extends React.Component {
     this.setState({ active: null });
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     const postData = new FormData();
     if (this.state.likesdish === true) {
       postData.append('likesdish', 1);
@@ -113,26 +109,25 @@ class Submit extends React.Component {
     if (this.state.image) {
       postData.append('image', this.state.image);
     }
-
-    $.post({
+    try {
+      await axios({
+      method: 'post',
       url: '/submit',
       data: postData,
       processData: false,
       contentType: false,
-      success: () => {
-        this.props.handlePostSubmit();
-        this.setState({
-          content: '',
-          restaurant: '',
-          dish: '',
-          photoURL: undefined,
-          likesdish: null,
-        });
-      },
-      error: (err) => {
-        console.log (err);
-      },
     });
+    this.props.handlePostSubmit();
+    this.setState({
+      content: '',
+      restaurant: '',
+      dish: '',
+      photoURL: undefined,
+      likesdish: null,
+    })
+  } catch(e) {
+    console.log(e);
+  }
   }
   handleClick(event) {
     if (event.currentTarget.name === 'like' && (this.state.likesdish === null || this.state.likesdish === false)) {
@@ -145,50 +140,21 @@ class Submit extends React.Component {
       this.setState({ likesdish: null });
     }
   }
+
   handleToggle() {
     this.setState({ isRecipe: !this.state.isRecipe });
   }
 
-  handleFiles() {
-    const photo = this.fileInput.files[0];
-    this.setState({ image: photo, photoURL: window.URL.createObjectURL(photo) });
-  }
-
   render() {
-    const dropzoneClick = (e) => {
-      $('#photoPicker').click();
-      e.preventDefault();
-    };
-
     return (
       <div id="submit">
         <form onSubmit={this.handleSubmit} id="form" encType="multipart/form-data">
           <div className="form-group row">
             <div className="col-5">
-              <input
-                type="file"
-                id="photoPicker"
-                name="photo"
-                accept="image/*"
-                onChange={this.handleFiles}
-                ref={(input) => {
-                  this.fileInput = input;
-                }}
-              />
-              <div
-                id="dropzone"
-                onClick={dropzoneClick}
-                onKeyDown={dropzoneClick}
-                onDrop={this.handleDrop}
-                onDragEnter={this.preventDefault}
-                onDragOver={this.preventDefault}
-                role="button"
-                tabIndex={0}
-              >
-                { this.state.photoURL &&
-                <img alt="dish" src={this.state.photoURL} id="photoPreview" /> }
+              <Dropzone id="dropzone" onDrop={this.onDrop}>
+                { this.state.photoURL && <img id="photoPreview" src={this.state.photoURL} alt="dish" /> }
                 { !this.state.photoURL && <i className="material-icons">add_a_photo</i> }
-              </div>
+              </Dropzone>
             </div>
             <div className="col">
               <div className="row">

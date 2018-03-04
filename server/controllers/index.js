@@ -6,6 +6,7 @@ const dishes = require('./dishes');
 const restaurants = require('./restaurants');
 const dishLikes = require('./dishLikes');
 const postLikes = require('./postLikes');
+const submit = require('./submit');
 
 module.exports = {
   redirectSearch: (req, res) => {
@@ -20,4 +21,5 @@ module.exports = {
   posts,
   dishLikes,
   users,
+  submit,
 };

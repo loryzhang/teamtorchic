@@ -1,7 +1,7 @@
 import React from 'react';
-import Login from './login';
-import Signup from './signup';
-import Search from './search';
+import Login from './login.jsx';
+import Signup from './signup.jsx';
+import Search from './search.jsx';
 
 class Header extends React.Component {
   constructor(props) {

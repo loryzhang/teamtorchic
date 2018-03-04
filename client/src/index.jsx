@@ -1,9 +1,9 @@
 import React from 'react';
 import $ from 'jquery';
 import ReactDOM from 'react-dom';
-import Header from './components/header';
-import Submit from './components/submit';
-import Posts from './components/posts';
+import Header from './components/header.jsx';
+import Submit from './components/submit.jsx';
+import Posts from './components/posts.jsx';
 
 class App extends React.Component {
   constructor(props) {

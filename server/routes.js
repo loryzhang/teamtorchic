@@ -23,7 +23,7 @@ router.get('/user/:username', auth.isLogin, controller.posts.getByUsername);
 router.get('/rating', auth.isLogin, controller.posts.getByRating);
 router.get('/dish/:dishname', auth.isLogin, controller.posts.getByDish);
 router.get('/restaurant/:name', auth.isLogin, controller.posts.getByRestaurant);
-router.post('/submit', upload.single('image'), controller.posts.submit);
+router.post('/submit', upload.single('image'), controller.submit);
 router.post('/votes/upvote', auth.isLogin, controller.dishLikes.upVote);
 router.post('/votes/downvote', auth.isLogin, controller.dishLikes.downVote);
 router.get('/user/profile', auth.isLogin, controller.users.getProfile);

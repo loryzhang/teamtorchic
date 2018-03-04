@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 
-import Post from './post';
+import Post from './post.jsx';
 
 class Posts extends React.Component {
   constructor(props) {

@@ -4,7 +4,7 @@ module.exports = {
   get: async (req, res) => {
     const { dishId } = req.params;
     try {
-      const results = await models.dishelikes.get(dishId);
+      const results = await models.dishLikes.get(dishId);
       const data = {
         upvote: 0,
         downvote: 0,
@@ -22,21 +22,23 @@ module.exports = {
     }
   },
   upVote: async (req, res) => {
+    console.log('hehe');
     const {
       dishid, likesdish, userid, restaurantid,
     } = req.body;
     try {
-      res.json(await models.dishelikes.upVote(dishid, likesdish, userid, restaurantid));
+      res.json(await models.dishLikes.upVote(dishid, likesdish, userid, restaurantid));
     } catch (e) {
       res.status(400).send(e);
     }
   },
   downVote: async (req, res) => {
+    console.log('ha');
     const {
       dishid, likesdish, userid, restaurantid,
     } = req.body;
     try {
-      res.json(await models.dishlikes.downVote(dishid, likesdish, userid, restaurantid));
+      res.json(await models.dishLikes.downVote(dishid, likesdish, userid, restaurantid));
     } catch (e) {
       res.status(400).send(e);
     }
