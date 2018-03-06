@@ -1,6 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
-
+import axios from 'axios';
 import Post from './post.jsx';
 
 class Posts extends React.Component {
@@ -28,31 +27,37 @@ class Posts extends React.Component {
     }
   }
 
-  postUpvote(query) {
-    $.post({
-      contentType: 'application/json',
-      url: '/votes/upvote',
-      data: JSON.stringify(query),
-      success: () => {
-        this.props.changeView();
-      },
-      error: () => { console.log('LORY IS MY BEST FRIEND'); },
-    });
+  async postUpvote(query) {
+    try {
+      await axios({
+        method: 'post',
+        contentType: 'application/json',
+        url: '/votes/upvote',
+        data: query,
+      });
+      this.props.changeView();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  postDownvote(query) {
-    $.post({
-      contentType: 'application/json',
-      url: '/votes/downvote',
-      data: JSON.stringify(query),
-      success: () => {
-        this.props.changeView();
-      },
-      error: () => { console.log('LORY IS MY BEST FRIEND'); },
-    });
+  async postDownvote(query) {
+    console.log('query', query);
+    try {
+      await axios({
+        method: 'post',
+        contentType: 'application/json',
+        url: '/votes/downvote',
+        data: query,
+      });
+      this.props.changeView();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   handleClick(query, vote) {
+    query.user = this.state.id;
     if (vote) {
       query.likesdish = 1;
       query.userid = this.state.id;
@@ -66,6 +71,7 @@ class Posts extends React.Component {
 
 
   render() {
+    console.log('hi', this.state.posts)
     return (
       <div>
         { this.state.posts.map(post =>

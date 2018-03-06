@@ -109,7 +109,9 @@ class Submit extends React.Component {
     if (this.state.image) {
       postData.append('image', this.state.image);
     }
+    
     try {
+      console.log('hi');
       await axios({
       method: 'post',
       url: '/submit',
@@ -123,7 +125,8 @@ class Submit extends React.Component {
       dish: '',
       photoURL: undefined,
       likesdish: null,
-    })
+    });
+    this.props.changeView();
   } catch(e) {
     console.log(e);
   }

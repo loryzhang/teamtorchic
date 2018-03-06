@@ -2,6 +2,7 @@ const models = require('../models');
 
 module.exports = {
   get: async (req, res) => {
+    console.log('getdishlikecontroller');
     const { dishId } = req.params;
     try {
       const results = await models.dishLikes.get(dishId);
@@ -9,10 +10,12 @@ module.exports = {
         upvote: 0,
         downvote: 0,
       };
-      results.rows.forEach((post) => {
+      console.log(results.rows[0]);
+      results.forEach((post) => {
+        console.log(post);
         if (post.likesdish) {
           data.upvote += 1;
-        } else {
+        } else if (post.likesdish === false) {
           data.downvote += 1;
         }
       });
@@ -22,7 +25,6 @@ module.exports = {
     }
   },
   upVote: async (req, res) => {
-    console.log('hehe');
     const {
       dishid, likesdish, userid, restaurantid,
     } = req.body;

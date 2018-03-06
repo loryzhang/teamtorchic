@@ -2,6 +2,7 @@ const db = require('./postgreSql');
 
 module.exports = {
   get: async (dishid) => {
+    console.log('getDishlikes')
     const dishlikes = {
       text: 'select * from posts inner join dishes on dishes.id = posts.dishId where dishes.id = $1',
       values: [dishid],
@@ -53,6 +54,7 @@ module.exports = {
     }
   },
   downVote: async (dishid, likesdish, userid, restaurantid) => {
+    console.log('haha');
     const checkVote = {
       text: 'select likesdish, id from posts where userid = $1 and dishid = $2',
       values: [userid, dishid],
@@ -65,16 +67,16 @@ module.exports = {
     try {
       const votes = await db.client.query(checkVote);
       if (votes.rowCount) {
-        let notlike = votes.rows[0][0];
+        let islike = votes.rows[0][0];
         const targetpost = votes.rows[0][1];
-        if (notlike === 0) {
-          notlike = null;
+        if (!islike) {
+          islike = null;
         } else {
-          notlike = 0;
+          islike = 0;
         }
         const updateDownVote = {
           text: 'update posts set likesdish = $1 where id = $2',
-          values: [notlike, targetpost],
+          values: [islike, targetpost],
         };
         try {
           return await db.client.query(updateDownVote);

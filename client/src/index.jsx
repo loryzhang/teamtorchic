@@ -106,6 +106,7 @@ class App extends React.Component {
         <Submit
           user={this.state.user}
           id={this.state.id}
+          changeView={this.changeView}
         />}
         <Posts
           user={this.state.user}

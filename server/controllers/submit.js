@@ -6,8 +6,9 @@ module.exports = async (req, res) => {
   if (likesdish === 'null') {
     data.likesdish = null;
   }
+  
   if (req.file) {
-    data.image = req.file.filename;
+    data.image = req.file.location;
   } else {
     data.image = null;
   }
