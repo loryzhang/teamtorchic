@@ -3,6 +3,7 @@ const { sortByRating, countLikes } = require('./utils');
 
 const getDishLikes = posts => posts.map(async (post) => {
   const { dishid } = post;
+  console.log('eeee', dishid);
   try {
     const result = await models.dishLikes.get(dishid);
     return result;

@@ -24,6 +24,7 @@ class Submit extends React.Component {
     this.handleAcceptDish = this.handleAcceptDish.bind(this);
     this.handleAcceptRestaurant = this.handleAcceptRestaurant.bind(this);
     this.onDrop = this.onDrop.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 
     (async () => {
       try {
@@ -56,6 +57,10 @@ class Submit extends React.Component {
   async getRestaurantList() {
     const restaurants = await axios('/restaurants');
     return restaurants.data.rows;
+  }
+
+  handleChange(event) {
+    this.setState({ [event.target.id]: event.target.value });
   }
 
   handleAcceptDish(event) {
@@ -186,6 +191,7 @@ class Submit extends React.Component {
                     options={this.state.suggestions}
                     handleAccept={this.handleAcceptRestaurant}
                     handleAdd={this.endSuggest}
+                    onKeyDown={this.suggest}
                     type="restaurant"
                     item={this.state.restaurant}
                   />}

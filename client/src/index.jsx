@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import ReactDOM from 'react-dom';
+import store from './store';
+import { Provider } from 'react-redux';
 import Header from './components/header.jsx';
 import Submit from './components/submit.jsx';
 import Posts from './components/posts.jsx';
@@ -95,26 +97,28 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <Header
-          user={this.state.user}
-          handleLogin={this.handleLogin}
-          handleLogout={this.handleLogout}
-          handleSearch={this.handleSearch}
-        />
-        {this.state.user &&
-        <Submit
-          user={this.state.user}
-          id={this.state.id}
-          changeView={this.changeView}
-        />}
-        <Posts
-          user={this.state.user}
-          changeView={this.changeView}
-          id={this.state.id}
-          posts={this.state.posts}
-        />
-      </div>
+      <Provider store={store} >
+        <div>
+          <Header
+            user={this.state.user}
+            handleLogin={this.handleLogin}
+            handleLogout={this.handleLogout}
+            handleSearch={this.handleSearch}
+          />
+          {this.state.user &&
+          <Submit
+            user={this.state.user}
+            id={this.state.id}
+            changeView={this.changeView}
+          />}
+          <Posts
+            user={this.state.user}
+            changeView={this.changeView}
+            id={this.state.id}
+            posts={this.state.posts}
+          />
+        </div>
+      </Provider>
     );
   }
 }

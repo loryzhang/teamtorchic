@@ -1,6 +1,7 @@
 module.exports = {
   countLikes: (results) => {
     const data = results.map(result => result.rows);
+    console.log('data', data);
     const output = [];
     data.forEach((dish, i) => {
       const vote = {
@@ -23,6 +24,7 @@ module.exports = {
       output[i].downvoteUsers = downvoteUsers;
       output[i].votes = vote;
     });
+    console.log (output);
     return output;
   },
   sortByRating: (posts) => {
