@@ -1,11 +1,11 @@
 # Project Name
 
 Food that is chic and on fleek.
+![alt tag](https://imgur.com/js4n4mr)
 
 ## Team
 
   - Angela
-  - Anna
   - David
   - Lory
 
@@ -25,11 +25,11 @@ Food that is chic and on fleek.
 
 ## Requirements
 
-- Node 6.4.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Node
+- Redis
+- Postgresql
+- React
+- Webpack
 
 ## Development
 
@@ -37,11 +37,7 @@ Food that is chic and on fleek.
 
 From within the root directory:
 
-```sh
-npm install -g bower
 npm install
-bower install
-```
 
 ### Roadmap
 
