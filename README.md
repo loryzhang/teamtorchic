@@ -1,7 +1,7 @@
 # Project Name
 
 Food that is chic and on fleek.
-![alt tag](https://imgur.com/js4n4mr)
+![alt tag](https://i.imgur.com/js4n4mr.png)
 
 ## Team
 
